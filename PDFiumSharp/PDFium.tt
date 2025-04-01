@@ -8,10 +8,11 @@ License: Microsoft Reciprocal License (MS-RL)
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ output extension=".g.cs" #>
+<#@ output extension=".generated.cs" #>
 <# // ------------------------------------------------------ Code Start ------------------------------------------------------
 const string DllName32 = "pdfium_x86";
 const string DllName64 = "pdfium_x64";
+const string DllNameArm64 = "pdfium_arm64";
 const string CallingConvention = "CallingConvention.Cdecl";
 
 var Imports = new[] {
@@ -2259,6 +2260,9 @@ foreach (var import in Imports)
 
 			[DllImport("<#=DllName64#>", CallingConvention = <#=CallingConvention#>, EntryPoint = "<#=name#>")]<#=attributes#>
 			internal static extern <#=returnType#> <#=name#>_x64<#=argumentList#>;
+
+			[DllImport("<#=DllNameArm64#>", CallingConvention = <#=CallingConvention#>, EntryPoint = "<#=name#>")]<#=attributes#>
+			internal static extern <#=returnType#> <#=name#>_arm64<#=argumentList#>;
 		}
 
 		/// <include file='PDFium.xml' path='Documentation/<#=name#>/*'/><#=documentation#>
@@ -2272,6 +2276,8 @@ foreach (var import in Imports)
 				lock(_lock) { PlatformInvoke.<#=name#>_x64(<#=args#>); }
 			else if (RuntimeInformation.ProcessArchitecture == Architecture.X86)
 				lock(_lock) { PlatformInvoke.<#=name#>_x86(<#=args#>); }
+			else if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
+				lock(_lock) { PlatformInvoke.<#=name#>_arm64(<#=args#>); }
 			else
 				throw new PlatformNotSupportedException();
 <# // ------------------------------------------------------ Code Start ------------------------------------------------------
@@ -2283,6 +2289,8 @@ foreach (var import in Imports)
 				lock(_lock) { return PlatformInvoke.<#=name#>_x64(<#=args#>); }
 			else if (RuntimeInformation.ProcessArchitecture == Architecture.X86)
 				lock(_lock) { return PlatformInvoke.<#=name#>_x86(<#=args#>); }
+			else if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
+				lock(_lock) { return PlatformInvoke.<#=name#>_arm64(<#=args#>); }
 			else
 				throw new PlatformNotSupportedException();
 <# // ------------------------------------------------------ Code Start ------------------------------------------------------
