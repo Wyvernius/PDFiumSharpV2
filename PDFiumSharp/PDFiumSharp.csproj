@@ -8,6 +8,7 @@
     <Platforms>AnyCPU;x64</Platforms>
     <Product>PDFiumSharp</Product>
     <PackageId>PDFiumSharp.NetStandart2.0</PackageId>
+    <RuntimeIdentifiers>win-x64;osx-x64;osx-arm64</RuntimeIdentifiers>
     <Version>1.1.4</Version>
     <Description>C#/.NET Wrapper for the PDFium library. Add also a package for the native binaries (currently only PDFium.Windows is provided) or provide them (pdfium_x64.dll, pdfium_x86.dll) yourself.</Description>
     <PackageProjectUrl>https://github.com/Zubastic/PDFiumSharp/blob/master/README.md</PackageProjectUrl>
@@ -55,16 +56,16 @@
   </ItemGroup>
   
   <ItemGroup>
-    <None Remove="runtimes\osx-arm64\libpdfium.dylib" />
-    <Content Include="runtimes\osx-arm64\libpdfium.dylib" Condition=" $([MSBuild]::IsOsPlatform('OSX')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'ARM64' ">
+    <None Remove="runtime\osx-arm64\libpdfium.dylib" />
+    <Content Include="runtime\osx-arm64\libpdfium.dylib" Condition="'$(RuntimeIdentifier)' == 'osx-arm64' ">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Remove="runtimes\osx-x64\libpdfium.dylib" />
-    <Content Include="runtimes\osx-x64\libpdfium.dylib" Condition=" $([MSBuild]::IsOsPlatform('OSX')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64' ">
+    <None Remove="runtime\osx-x64\libpdfium.dylib" />
+    <Content Include="runtime\osx-x64\libpdfium.dylib" Condition="'$(RuntimeIdentifier)' == 'osx-x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Remove="runtimes\win-x64\pdfium.dll" />
-    <Content Include="runtimes\win-x64\pdfium.dll" Condition=" $([MSBuild]::IsOsPlatform('WINDOWS')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64' ">
+    <None Remove="runtime\win-x64\pdfium.dll" />
+    <Content Include="runtime\win-x64\pdfium.dll" Condition="'$(RuntimeIdentifier)' == 'win-x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
