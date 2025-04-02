@@ -56,15 +56,12 @@
   </ItemGroup>
   
   <ItemGroup>
-    <None Remove="runtime\osx-arm64\libpdfium.dylib" />
     <Content Include="runtime\osx-arm64\libpdfium.dylib" Condition="'$(RuntimeIdentifier)' == 'osx-arm64' ">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Remove="runtime\osx-x64\libpdfium.dylib" />
     <Content Include="runtime\osx-x64\libpdfium.dylib" Condition="'$(RuntimeIdentifier)' == 'osx-x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Remove="runtime\win-x64\pdfium.dll" />
     <Content Include="runtime\win-x64\pdfium.dll" Condition="'$(RuntimeIdentifier)' == 'win-x64'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
