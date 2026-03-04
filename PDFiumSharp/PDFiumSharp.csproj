@@ -5,10 +5,12 @@
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <AssemblyVersion>1.1.4.0</AssemblyVersion>
     <Copyright>Copyright © Tobias Meyer 2023</Copyright>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>AnyCPU;x64;arm64</Platforms>
     <Product>PDFiumSharp</Product>
     <PackageId>PDFiumSharp.NetStandart2.0</PackageId>
+    <RuntimeIdentifiers>win-x64;osx-x64;osx-arm64</RuntimeIdentifiers>
     <Version>1.1.4</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Description>C#/.NET Wrapper for the PDFium library. Add also a package for the native binaries (currently only PDFium.Windows is provided) or provide them (pdfium_x64.dll, pdfium_x86.dll) yourself.</Description>
     <PackageProjectUrl>https://github.com/Zubastic/PDFiumSharp/blob/master/README.md</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Zubastic/PDFiumSharp</RepositoryUrl>
@@ -34,13 +36,10 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="PDFium.g.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>PDFium.tt</DependentUpon>
-    </None>
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|arm64'">
+    <DocumentationFile>bin\Release\netstandard2.0\PDFiumSharp.xml</DocumentationFile>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
@@ -50,34 +49,40 @@
   <ItemGroup>
     <None Update="Types\FPDF_Typedefs.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>FPDF_Typedefs.g.cs</LastGenOutput>
+      <LastGenOutput>FPDF_Typedefs.generated.cs</LastGenOutput>
     </None>
     <None Update="PDFium.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>PDFium.g.cs</LastGenOutput>
-    </None>
-    <None Update="pdfium_x64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="pdfium_x86.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <LastGenOutput>PDFium.generated.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
-
+  
   <ItemGroup>
-    <Compile Update="PDFium.g.cs">
-      <DesignTime>True</DesignTime>
+    <Content Include="runtime\osx-arm64\libpdfium.dylib" Condition="'$(RuntimeIdentifier)' == 'osx-arm64' OR ($([MSBuild]::IsOsPlatform('OSX')) AND $([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture) == 'ARM64')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="runtime\osx-x64\libpdfium.dylib" Condition="'$(RuntimeIdentifier)' == 'osx-x64' OR ($([MSBuild]::IsOsPlatform('OSX')) AND $([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture) == 'X64')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="runtime\win-x64\pdfium.dll" Condition="'$(RuntimeIdentifier)' == 'win-x64' OR $([MSBuild]::IsOsPlatform('WINDOWS')) ">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Update="Types\FPDF_Typedefs.generated.cs">
       <AutoGen>True</AutoGen>
-      <DependentUpon>PDFium.tt</DependentUpon>
-    </Compile>
-    <Compile Update="Types\FPDF_Typedefs.g.cs">
       <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
       <DependentUpon>FPDF_Typedefs.tt</DependentUpon>
+    </Compile>
+    <Compile Update="PDFium.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PDFium.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 

@@ -6,6 +6,7 @@ License: Microsoft Reciprocal License (MS-RL)
 */
 #endregion
 using System;
+using System.Collections.Generic;
 using PDFiumSharp.Enums;
 using PDFiumSharp.Types;
 
@@ -24,6 +25,9 @@ namespace PDFiumSharp
 		/// One point is 1/72 inch(around 0.3528 mm).
 		/// </summary>
 		public double Height => PDFium.FPDF_GetPageHeight(Handle);
+		
+		public string Text { get; private set; }
+		public List<string> Links { get; private set; } = new List<string>();
 
 		/// <summary>
 		/// Gets the page width and height (excluding non-displayable area) measured in points.
@@ -72,6 +76,10 @@ namespace PDFiumSharp
 				throw new PDFiumException();
 			Document = doc;
 			Index = index;
+			FPDF_TEXTPAGE textpage = PDFium.FPDFText_LoadPage(page);
+			int textChars = PDFium.FPDFText_CountChars(textpage);
+			Text = PDFium.FPDFText_GetText(textpage, 0, textChars);
+			PDFium.FPDFText_ClosePage(textpage);
 		}
 
 		internal static PdfPage Load(PdfDocument doc, int index) => new PdfPage(doc, PDFium.FPDF_LoadPage(doc.Handle, index), index);
