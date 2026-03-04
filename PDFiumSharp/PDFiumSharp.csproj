@@ -68,7 +68,7 @@
     <Content Include="runtime\osx-x64\libpdfium.dylib" Condition="'$(RuntimeIdentifier)' == 'osx-x64' OR ($([MSBuild]::IsOsPlatform('OSX')) AND $([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture) == 'X64')">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="runtime\win-x64\pdfium.dll" Condition="'$(RuntimeIdentifier)' == 'win-x64' OR $([MSBuild]::IsOsPlatform('WINDOWS')) ">
+    <Content Include="pdfium_x64.dll" Condition="'$(RuntimeIdentifier)' == 'win-x64' OR $([MSBuild]::IsOsPlatform('WINDOWS')) ">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
